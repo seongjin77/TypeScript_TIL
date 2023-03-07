@@ -8,8 +8,8 @@ function add(x: any, y: any): any {
   return x + y;
 }
 
-console.log(add(1, 2)); // 3
-console.log(add('Hello, ', 'TypeScript!')); // Hello, TypeScript!
+// console.log(add(1, 2)); // 3
+// console.log(add('Hello, ', 'TypeScript!')); // Hello, TypeScript!
 
 
 // exercises 6 
@@ -43,14 +43,25 @@ export function logPerson(person: Person) {
       ` - ${person.name}, ${person.age}, ${person.type === 'admin' ? person.role : person.occupation}`
   );
 }
+// 제네릭
+export function getObjectKeys<T>(criteria: Partial<T>): (keyof T)[]  {
+  return Object.keys(criteria) as (keyof T)[];
+}
+
 // 함수 오버로딩
-export function filterPersons(persons: Person[], personType:'user' , criteria: Partial<Person> ): User[];
-export function filterPersons(persons: Person[], personType: 'admin', criteria: Partial<Person> ): Admin[];
-export function filterPersons(persons: Person[], personType: string, criteria: Partial<Person> ): unknown[] {
+export function filterPersons(persons: Person[], personType:'user' , criteria:  Partial<Omit<User, 'type'>> ): User[];
+export function filterPersons(persons: Person[], personType: 'admin', criteria: Partial<Omit<Admin, 'type'>> ): Admin[];
+export function filterPersons(persons: Person[], personType: string, criteria: Partial<Omit<Person, 'type'>>  ): unknown[] {
   return persons
       .filter((person) => person.type === personType)
       .filter((person) => {
-          let criteriaKeys = Object.keys(criteria) as (keyof Person)[];
+          //console.log('걸러져 나온 값들',person );
+          
+          let criteriaKeys = getObjectKeys(criteria)
+
+          console.log('이건뭐야',criteriaKeys );
+          
+
           return criteriaKeys.every((fieldName) => {
               return person[fieldName] === criteria[fieldName];
           });
@@ -60,9 +71,9 @@ export function filterPersons(persons: Person[], personType: string, criteria: P
 export const usersOfAge23 = filterPersons(persons, 'user', { age: 23 });
 export const adminsOfAge23 = filterPersons(persons, 'admin', { age: 23 });
 
-console.log('Users of age 23:');
+// console.log('Users of age 23:');
 usersOfAge23.forEach(logPerson);
 
 
-console.log('Admins of age 23:');
+// console.log('Admins of age 23:');
 adminsOfAge23.forEach(logPerson);
