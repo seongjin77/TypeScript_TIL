@@ -29,8 +29,8 @@ function test(x:any , y:any) {
 
 
 // 느낌표의 뜻은 null이나 undefined가 아님을 보증한다는 의미. 컴파일시 ! 사라짐. 하지만 이것도 가능성을 열어두지 않기 때문에 비추천한다.
-const head = document.querySelector('#head')!;
-console.log(head);
+//const head = document.querySelector('#head')!;
+//console.log(head);
 
 // string과 String은 다름. 소문자로 하는 것 기억하기.
 // const a: string = 'hello';
@@ -44,12 +44,24 @@ const cc: bb = 'hello hell' // 여기서 자동 추천을 해준다.
 
 // 여러개의 변수들을 하나의 변수들을 묶어줄때 쓰임.
 // 컴파일시 js에서 사라짐
-const enum EDirection {
-  Up = 1,
-  Down = 're',
-  Left ='3',
-  Right = false
+// EDirection.Up 이런식으로 접근 가능
+// const enum EDirection {
+//   Up = 1,
+//   Down = 3,
+//   Left =56,
+//   Right = '234'.length,
+// }
+
+enum FileAccess {
+  // 상수 멤버
+  None,
+  Read = 1 << 1,
+  Write = 1 << 2,
+  ReadWrite = Read | Write,
+  // 계산된 멤버
+  G = "123".length,
 }
+
 // as const를 쓰면 해당 속성을 변환없이 그대로 쓰겠다는 뜻. readonly 추가됨.
 const ODirection = {
   Up : 0,
@@ -61,3 +73,17 @@ const ODirection = {
 // typeof는 값을 타입속성으로 바꿔준다. keyof는 키값을 타입속성으로 변환시켜줌.
 const obj = {a: '123', b: 'hello', c: 'world' };
 type Key = keyof typeof obj;
+
+//////////여기 안되는 부분 궁금 ////////////
+// declare function tt<T>(arr: T[], callback: (el: T) => any): void;
+// // declare function forEach<T>(arr: T[], callback: (el: T) => void): void;
+// let target: number[] = [];
+
+// tt([1, 2, 3], el => target.push(el));
+
+// interface A {
+//     talk: () => void;
+// }
+// const aaa: A = {
+//     talk() { return 3; }
+// }
